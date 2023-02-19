@@ -1,9 +1,12 @@
-import React from 'react'
+import Conv from "../components/conv/conv";
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 export default function Home({}: Props) {
-  return (
-    <div>Home</div>
-  )
+    return (
+        <div className="h-[calc(100vh-123px)]">
+            <Conv />
+        </div>
+    );
 }

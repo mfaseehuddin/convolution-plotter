@@ -10,14 +10,14 @@ type Props = {
 
 export default function Layout({ children }: Props) {
     //use the context
-    const { pages, currentPage } = useContext(AppContext);
+    const { pages, currentPage, appName } = useContext(AppContext);
 
     return (
         <Sidebar
             currentPage={currentPage}
             sideBarItems={pages}
-            appName="Synthia AI"
-            className={`dark`}
+            appName={appName}
+            className={``}
         >
             {children}
         </Sidebar>

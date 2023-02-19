@@ -36,7 +36,7 @@ export default function Sidebar({
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center justify-start">
                                     <a href="/" className="flex ml-2 md:mr-24">
-                                        <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
+                                        <span className="self-center text-xl font-semibold md:text-2xl whitespace-nowrap dark:text-white">
                                             {appName}
                                         </span>
                                     </a>
@@ -51,7 +51,7 @@ export default function Sidebar({
                     </nav>
                     <aside
                         id="logo-sidebar"
-                        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+                        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
                         aria-label="Sidebar"
                         ref={sidebarRef}
                     >
@@ -92,7 +92,7 @@ export default function Sidebar({
                             </ul>
                         </div>
                     </aside>
-                    <div className="p-4 sm:ml-64 dark:bg-gray-800">
+                    <div className="p-4 md:ml-64 dark:bg-gray-800">
                         <div className=" p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
                             {children}
                         </div>

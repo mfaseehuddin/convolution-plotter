@@ -12,6 +12,7 @@ import { useEffect } from "react";
 
 //create context for app of type
 export const AppContext = createContext<appContextType>({
+    appName: "",
     currentPage: "Home",
     setCurrentPage: () => {},
     pages: [],
@@ -25,6 +26,10 @@ type Props = {
 };
 
 export default function AppContextProvider({ children }: Props) {
+
+    const appName = "ConvPlot";
+
+
     const [currentPage, setCurrentPage] = useState<pages>("Home");
 
     const pages: SideBarItemProps[] = [
@@ -66,6 +71,7 @@ export default function AppContextProvider({ children }: Props) {
     return (
         <AppContext.Provider
             value={{
+                appName,
                 currentPage,
                 setCurrentPage,
                 pages,

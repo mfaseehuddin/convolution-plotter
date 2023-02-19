@@ -2,6 +2,7 @@ import { SideBarItemProps } from "../../components/sidebar/types";
 import { pages } from "../../types/types";
 import { Router } from "react-router-dom";
 export type appContextType = {
+    appName: string;
     //pages?
     pages: SideBarItemProps[];
     currentPage: pages;
