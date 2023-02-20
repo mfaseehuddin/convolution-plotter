@@ -1,4 +1,3 @@
-import { AdjustmentsHorizontalIcon } from "@heroicons/react/20/solid";
 import React from "react";
 import {
     ResponsiveContainer,
@@ -9,115 +8,129 @@ import {
     Tooltip,
 } from "recharts";
 
-type Props = {};
+//time function
+export function time(st: number, et: number, steps: number): number[] {
+    const time = [];
+    for (let i = st; i <= et; i += steps) {
+        time.push(Math.round(i * 100) / 100);
+    }
+    return time;
+}
 
-export default function Conv({}: Props) {
-    function time(st: number, et: number, steps: number): number[] {
-        const time = [];
-        for (let i = st; i <= et; i += steps) {
-            time.push(Math.round(i * 100) / 100);
-        }
-        return time;
+//elementary functions
+export function step(t: number): number {
+    if (t >= 0) {
+        return 1;
+    } else {
+        return 0;
     }
+}
+export function impulse(t: number): number {
+    if (t === 0) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+export function ramp(t: number): number {
+    if (t >= 0) {
+        return t;
+    } else {
+        return 0;
+    }
+}
+export function exponential(t: number): number {
+    if (t >= 0) {
+        return Math.exp(t);
+    } else {
+        return 0;
+    }
+}
+export function sine(t: number): number {
+    return Math.sin(t);
+}
+export function trianglarPulse(t: number): number {
+    if (t >= -1 && t <= 1) {
+        return 1 - Math.abs(t);
+    } else {
+        return 0;
+    }
+}
+export function rectangularPulse(a:number, t: number): number {
+    if (t >= -a && t <= a) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
 
-    //elementary functions
-    function step(t: number): number {
-        if (t >= 0) {
-            return 1;
-        } else {
-            return 0;
-        }
+export function sgn(t: number): number {
+    if (t > 0) {
+        return 1;
+    } else if (t < 0) {
+        return -1;
+    } else {
+        return 0;
     }
-    function impulse(t: number): number {
-        if (t === 0) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-    function ramp(t: number): number {
-        if (t >= 0) {
-            return t;
-        } else {
-            return 0;
-        }
-    }
-    function exponential(t: number): number {
-        if (t >= 0) {
-            return Math.exp(t);
-        } else {
-            return 0;
-        }
-    }
-    function sine(t: number): number {
-        return Math.sin(t);
-    }
-    function trianglarPulse(t: number): number {
-        if (t >= -1 && t <= 1) {
-            return 1 - Math.abs(t);
-        } else {
-            return 0;
-        }
-    }
-    function rectangularPulse(t: number): number {
-        if (t >= -1 && t <= 1) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
+}
 
-    function sgn(t: number): number {
-        if (t > 0) {
-            return 1;
-        } else if (t < 0) {
-            return -1;
-        } else {
-            return 0;
+export function sinc(a: number, t: number): number {
+    if (t === 0) {
+        return a;
+    } else {
+        return Math.sin(a * t) / t;
+    }
+}
+
+export function gauss(t: number): number {
+    return Math.exp(-t * t);
+}
+
+export function comb(T: number, t: number) {
+    return impulse(t % T);
+}
+
+export function Convolve(
+    a: Function,
+    b: Function,
+    domain: number[],
+    sampleFrequency: number
+) {
+    return (t: number) => {
+        let sum = 0;
+        for (let i = domain[0]; i <= domain[1]; i += sampleFrequency) {
+            sum += a(i) * b(t - i);
         }
-    }
+        return sum * 2 * sampleFrequency;
+    };
+}
 
-    function sinc(a: number, t: number): number {
-        if (t === 0) {
-            return a;
-        } else {
-            return Math.sin(a * t) / t;
-        }
-    }
+const pi = Math.PI;
 
-    function gauss(t: number): number {
-        return Math.exp(-t * t);
-    }
+type Props = {
+    signalA?: Function;
+    signalB?: Function;
+    domain: number[];
+    sampleFrequency: number;
+};
 
-    function comb(T: number, t: number) {
-        return impulse(t % T);
-    }
-
-    function conv(a: Function, b: Function) {
-        return (t: number) => {
-            let sum = 0;
-            for (let i = domain[0]; i <= domain[1]; i += sampleRate) {
-                sum += a(i) * b(t - i);
-            }
-            return sum * 2 * sampleRate;
-        };
-    }
-
-    const domain = [-5, 5];
-    const sampleRate = 0.1;
-    const pi = Math.PI;
-
-    const timeRange = time(domain[0], domain[1], sampleRate);
+export default function Conv({
+    signalA = (t: number) => trianglarPulse(t),
+    signalB = (t: number) => step(t) - step(t - pi),
+    domain,
+    sampleFrequency,
+}: Props) {
+    const timeRange = time(domain[0], domain[1], sampleFrequency);
 
     const mySignal1 = (t: number) =>
         (step(t + pi / 2) - step(t - pi / 2)) * sine(t);
-    const mySignal2 = (t: number) => trianglarPulse(t-3);
+    const mySignal2 = (t: number) => trianglarPulse(t);
     const mySignal3 = (t: number) => sinc(pi, t);
     const mySignal4 = (t: number) => impulse(t - 1);
     // const comber = (t: number) => comb(0, t);
 
-    const signalA = mySignal2;
-    const signalB = mySignal1;
+    // const signalA = mySignal2;
+    // const signalB = mySignal1;
 
     type plotterInputType = {
         name: string;
@@ -141,7 +154,7 @@ export default function Conv({}: Props) {
         },
         {
             name: "conv",
-            function: conv(signalA, signalB),
+            function: Convolve(signalA, signalB, domain, sampleFrequency),
             stroke: "#ff0000",
             animationDuration: 1000,
         },
@@ -190,7 +203,7 @@ export default function Conv({}: Props) {
                     <XAxis
                         dataKey="time"
                         type="number"
-                        domain={[5, 5]}
+                        domain={domain}
                         allowDecimals={false}
                         minTickGap={1}
                     />
@@ -198,7 +211,6 @@ export default function Conv({}: Props) {
                     <Tooltip />
                 </LineChart>
             </ResponsiveContainer>
-
         </div>
     );
 }

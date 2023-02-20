@@ -7,7 +7,6 @@ type Props = {};
 export default function Home({}: Props) {
     return (
         <div className="h-[calc(100vh-123px)]">
-            <Conv />
             <MathInput />
         </div>
     );

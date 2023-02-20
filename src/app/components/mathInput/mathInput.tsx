@@ -1,90 +1,122 @@
 import React from "react";
 import {
-    Equation,
-    EquationEvaluate,
     EquationContext,
     EquationOptions,
     defaultErrorHandler,
+    EquationEvaluate,
 } from "react-equation";
-import type {
-    Equation as EquationType,
-    EquationContext as EquationContextType,
-} from "";
-import { useEffect } from "react";
-import { ReferenceDot } from "recharts";
+
 import { defaultVariables, defaultFunctions } from "equation-resolver";
+import Conv from "../conv/conv";
+import { sinc, rectangularPulse } from "../conv/conv";
+
+const setDisplay = (node: HTMLElement) => {
+    if (node.nodeName === "SPAN") {
+        node.style.display = "flex";
+    }
+    node.childNodes.forEach((child) => {
+        if (child.nodeName === "SPAN") {
+            setDisplay(child as HTMLElement);
+        }
+    });
+};
 
 type Props = {};
 
 export default function MathInput({}: Props) {
-    const [equationInput, setEquationInput] = React.useState<string>("sin(x)");
-    const [parsedEquation, setParsedEquation] = React.useState<any>();
-    const [time, setTime] = React.useState<number>(0);
+    const [equationAInput, setEquationAInput] = React.useState<string>(
+        "rectangularPulse(t)"
+    );
+    const [equationBInput, setEquationBInput] = React.useState<string>(
+        "sin(t)(u(t)-u(t-1))"
+    );
+    // const [parsedEquation, setParsedEquation] = React.useState<any>();
+    const [time, setTime] = React.useState<number>(2);
     //recursively set the display of all the spans to flex
-    const setDisplay = (node: HTMLElement) => {
-        if (node.nodeName === "SPAN") {
-            node.style.display = "flex";
-        }
-        node.childNodes.forEach((child) => {
-            if (child.nodeName === "SPAN") {
-                setDisplay(child as HTMLElement);
-            }
-        });
-    };
 
     return (
-        <div className="">
-            <input
-                type="text"
-                className="w-full h-10 border-2 border-gray-300 rounded-md"
-                value={equationInput}
-                onChange={(e) => {
-                    setEquationInput(e.target.value);
-                }}
-            />
-            <label
-                htmlFor="default-range"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        <code className={``}>
+            <EquationOptions
+                variables={defaultVariables}
+                functions={defaultFunctions}
+                errorHandler={defaultErrorHandler}
             >
-                Default range
-            </label>
-            <input
-                id="default-range"
-                type="range"
-                value={time}
-                onChange={(e) => {
-                    setTime(Number(e.target.value));
-                }}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-            ></input>
-            <code
-                className={`equation-wrapper`}
-                ref={(ref) => {
-                    if (ref) {
-                        setDisplay(ref);
-                    }
-                }}
-            >
-                <EquationOptions
-                    variables={defaultVariables}
-                    functions={defaultFunctions}
-                    errorHandler={defaultErrorHandler}
-                >
-                    <EquationContext
-                        render={(equation) => (
-                            <>
-                                {equation(`t=${time}`)}
-                                {equation(`1*${equationInput}=`)}
-                            </>
-                        )}
-                    />
-                </EquationOptions>
+                <EquationContext
+                    render={(equation) => (
+                        <>
+                            <p>Equation 1:</p>
+                            <div className="flex justify-between my-2">
+                                <div className="px-5">
+                                    <p
+                                        ref={(ref) => {
+                                            if (ref) {
+                                                setDisplay(ref);
+                                            }
+                                        }}
+                                    >
+                                        {equation(equationAInput)}
+                                    </p>
+                                </div>
+                                <input
+                                    type="text"
+                                    className="w-1/2 h-10 px-2 border-2 border-gray-300 rounded-md"
+                                    value={equationAInput}
+                                    onChange={(e) => {
+                                        setEquationAInput(e.target.value);
+                                    }}
+                                />
+                            </div>
+                            <p>Equation 2:</p>
+                            <div className="flex justify-between items-center my-2">
+                                <div className="px-5">
+                                    <p
+                                        ref={(ref) => {
+                                            if (ref) {
+                                                setDisplay(ref);
+                                            }
+                                        }}
+                                    >
+                                        {equation(equationBInput)}
+                                    </p>
+                                </div>
+                                <input
+                                    type="text"
+                                    className="w-1/2 px-2 h-10 border-2 border-gray-300 rounded-md"
+                                    value={equationBInput}
+                                    onChange={(e) => {
+                                        setEquationBInput(e.target.value);
+                                    }}
+                                />
+                            </div>
 
-                {/* <pre>
-                    <code>{JSON.stringify(parsedEquation, null, 2)}</code>
-                </pre> */}
-            </code>
-        </div>
+                            <div>
+                                <p>Time: {equation(`${time}`)}s</p>
+                                <input
+                                    id="default-range"
+                                    type="range"
+                                    value={time}
+                                    onChange={(e) => {
+                                        setTime(Number(e.target.value));
+                                    }}
+                                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                                />
+                            </div>
+
+                            <Conv
+                                domain={[-7, 7]}
+                                sampleFrequency={0.1}
+                                signalA={(t: number) => sinc(1, t)}
+                                signalB={(t: number) =>
+                                    2.5 * rectangularPulse(0.1, t)
+                                }
+                            />
+
+                            {/* {equation(`${equationInput}=`)} */}
+                        </>
+                    )}
+                />
+            </EquationOptions>
+        </code>
     );
 }
 
@@ -98,13 +130,13 @@ export default function MathInput({}: Props) {
 
 {
     /* <div className="flex"
-                                    ref={(ref) => {
-                                        if (ref) {
-                                            setDisplay(ref);
-                                        }
-                                    }}
-                                >
-                                    <p>equation:</p>
-                                    <Equation value={equationInput} /> 
-                                </div> */
+ref={(ref) => {
+if (ref) {
+setDisplay(ref);
+}
+}}
+>
+<p>equation:</p>
+<Equation value={equationInput} /> 
+</div> */
 }
