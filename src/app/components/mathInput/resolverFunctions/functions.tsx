@@ -5,7 +5,7 @@ import { resolve } from "equation-resolver";
 
 import {
     step,
-    trianglarPulse,
+    triangularPulse,
     sine,
     sgn,
     ramp,
@@ -37,26 +37,6 @@ export const stepResolver = (
     return {
         type: "number",
         value: step(arg.value),
-    };
-};
-
-export const trianglarPulseResolver = (
-    node: EquationNodeFunction,
-    options: ResolveOptions
-): ResultNode => {
-    if (node.args.length !== 1) {
-        throw new Error("Expected 1 argument");
-    }
-
-    const arg = resolve(node.args[0], options);
-
-    if (arg.type !== "number") {
-        throw new Error("Expected number");
-    }
-
-    return {
-        type: "number",
-        value: trianglarPulse(arg.value),
     };
 };
 
@@ -253,6 +233,35 @@ export const impulseResolver = (
     };
 };
 
+
+export const triangularPulseResolver = (
+    node: EquationNodeFunction,
+    options: ResolveOptions
+): ResultNode => {
+    if (node.args.length !== 2) {
+        throw new Error("Expected 2 arguments");
+    }
+    const a = resolve(node.args[0], options);
+    const arg = resolve(node.args[1], options);
+
+    if (a.type !== "number") {
+        throw new Error("Expected number");
+    }
+
+    if (arg.type !== "number") {
+        throw new Error("Expected number");
+    }
+
+    return {
+        type: "number",
+        value: triangularPulse(a.value, arg.value),
+    };
+};
+
+
+
+
+
 // export const convRevResolver = (
 //     node: EquationNodeFunction,
 //     options: ResolveOptions
@@ -290,12 +299,13 @@ export const convResolvers: FunctionLookup = {
     rectangularPulse: rectangularPulseResolver,
     sinc: sincResolver,
     impulse: impulseResolver,
+    trianglarPulse: triangularPulseResolver,
     // convRev: convRevResolver,
 };
 
 import { EquationNode } from "equation-parser";
 import { defaultFunctions } from "equation-resolver";
-import { ResultNodeNumber } from "equation-resolver";
+
 
 export const convInterfacer = (
     parsedEquation: EquationNode,

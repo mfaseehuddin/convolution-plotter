@@ -11,13 +11,14 @@ import { EquationNode } from "equation-parser";
 // import { EquationParserError } from "equation-parser";
 import { EquationParserError } from "equation-parser/dist/EquationParserError";
 import { convInterfacer } from "../mathInput/resolverFunctions/functions";
+import { useEffect, useState } from "react";
 const pi = Math.PI;
 
 type Props = {
     signalA: EquationNode | EquationParserError;
     signalB: EquationNode | EquationParserError;
     domain: number[];
-    sampleFrequency: number;
+    sampleTime: number;
     shouldConvolve: boolean;
 };
 
@@ -25,10 +26,10 @@ export default function Conv({
     signalA,
     signalB,
     domain,
-    sampleFrequency,
+    sampleTime,
     shouldConvolve,
 }: Props) {
-    const timeRange = time(domain[0], domain[1], sampleFrequency);
+    const timeRange = time(domain[0], domain[1], sampleTime);
 
     if (signalA.type === "parser-error") {
         return <div>signalA is an EquationParserError</div>;
@@ -44,8 +45,10 @@ export default function Conv({
         animationDuration?: number;
     };
 
-    const interfacedSignalA = (t:number) => convInterfacer(signalA as EquationNode, t);
-    const interfacedSignalB = (t:number) => convInterfacer(signalB as EquationNode, t);
+    const interfacedSignalA = (t: number) =>
+        convInterfacer(signalA as EquationNode, t);
+    const interfacedSignalB = (t: number) =>
+        convInterfacer(signalB as EquationNode, t);
 
     const functionsToPlot: plotterInputType[] = [
         {
@@ -60,10 +63,21 @@ export default function Conv({
             stroke: "#82ca9d",
             animationDuration: 100,
         },
+        {
+            name: "xaxis",
+            function: (t: number) => 0,
+            stroke: "#000000",
+            animationDuration: 100,
+        },
         shouldConvolve
             ? {
                   name: "conv",
-                  function: Convolve(interfacedSignalA, interfacedSignalB, domain, sampleFrequency),
+                  function: Convolve(
+                      interfacedSignalA,
+                      interfacedSignalB,
+                      domain,
+                      sampleTime
+                  ),
                   stroke: "#ff0000",
                   animationDuration: 1000,
               }
@@ -74,7 +88,6 @@ export default function Conv({
                   animationDuration: 1000,
               },
     ];
-
 
     //lets make this function async to see if it helps with the lag
     const plotFunctionsHelper = (
@@ -96,6 +109,7 @@ export default function Conv({
             return dataAtEachTime;
         });
     };
+
     const plotFunctions = plotFunctionsHelper(functionsToPlot, timeRange);
     return (
         <div className="h-1/2 w-full">
@@ -118,22 +132,27 @@ export default function Conv({
                             );
                         })
                     }
+
                     <XAxis
                         dataKey="time"
                         type="number"
-                        domain={domain}
+                        domain={["dataMin", "dataMax"]}
                         allowDecimals={false}
-                        minTickGap={1}
+                        minTickGap={0.5}
+                        axisLine={true}
                     />
-                    <YAxis />
+                    <YAxis
+                        type="number"
+                        domain={["dataMin-0.5", "dataMax+0.5"]}
+                        allowDecimals={false}
+                        minTickGap={0.5}
+                    />
                     <Tooltip />
                 </LineChart>
             </ResponsiveContainer>
         </div>
     );
 }
-
-
 
 //time function
 export function time(st: number, et: number, steps: number): number[] {
@@ -146,7 +165,9 @@ export function time(st: number, et: number, steps: number): number[] {
 
 //elementary functions
 export function step(t: number): number {
-    if (t >= 0) {
+    if (t === 0) {
+        return 0.5;
+    } else if (t > 0) {
         return 1;
     } else {
         return 0;
@@ -176,8 +197,8 @@ export function exponential(t: number): number {
 export function sine(t: number): number {
     return Math.sin(t);
 }
-export function trianglarPulse(t: number): number {
-    if (t >= -1 && t <= 1) {
+export function triangularPulse(a: number, t: number): number {
+    if (t >= -a && t <= a) {
         return 1 - Math.abs(t);
     } else {
         return 0;
@@ -217,17 +238,19 @@ export function comb(T: number, t: number) {
     return impulse(t % T);
 }
 
+//need to make this function async to see if it helps with the lag
+
 export function Convolve(
     a: Function,
     b: Function,
     domain: number[],
-    sampleFrequency: number
+    sampleTime: number
 ) {
     return (t: number) => {
         let sum = 0;
-        for (let i = domain[0]; i <= domain[1]; i += sampleFrequency) {
+        for (let i = domain[0]; i <= domain[1]; i += sampleTime) {
             sum += a(i) * b(t - i);
         }
-        return sum * 2 * sampleFrequency;
+        return sum * 2 * sampleTime;
     };
 }
