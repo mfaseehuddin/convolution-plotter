@@ -19,7 +19,8 @@ export default function Conv({}: Props) {
         }
         return time;
     }
-    // console.log("time: ", time(-1, 5, 0.1));
+
+    //elementary functions
     function step(t: number): number {
         if (t >= 0) {
             return 1;
@@ -51,17 +52,106 @@ export default function Conv({}: Props) {
     function sine(t: number): number {
         return Math.sin(t);
     }
+    function trianglarPulse(t: number): number {
+        if (t >= -1 && t <= 1) {
+            return 1 - Math.abs(t);
+        } else {
+            return 0;
+        }
+    }
+    function rectangularPulse(t: number): number {
+        if (t >= -1 && t <= 1) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 
-    const timeRange = time(-10, 10, 0.1);
+    function sgn(t: number): number {
+        if (t > 0) {
+            return 1;
+        } else if (t < 0) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
 
-    const functionsToPlot = [
-        // { name: "sine", function: (t:number) => Math.cos(t - 1) },
-        { name: "step", function: (t: number) => step(2 * (t - 1)) },
-        { name: "impulse", function: impulse },
-        { name: "sex", function: (t: number) => Math.exp(- Math.pow(t,2)) },
-        // { name: "ConvolutionOfSineAndStep", function: sine },
+    function sinc(a:number, t: number): number {
+        if (t === 0) {
+            return a;
+        } else {
+            return Math.sin(a*t) / t;
+        }
+    }
+
+    function gauss(t: number): number {
+        return Math.exp(-t * t);
+    }
+
+    function comb(T:number, t:number){
+        return impulse(t%T);
+    }
+
+
+
+    function conv(a: Function, b: Function) {
+        return (t: number) => {
+            let sum = 0;
+            for (let i = domain[0]; i <= domain[1]; i += sampleRate) {
+                sum += a(i) * b(t - i);
+            }
+            return sum * 2 * sampleRate;
+        };
+    }
+
+
+    
+
+    const domain = [-5, 5];
+    const sampleRate = 0.1;
+    const pi = Math.PI;
+
+    const timeRange = time(domain[0], domain[1], sampleRate);
+
+    const mySignal1 = (t: number) =>
+        (step(t + pi / 2) - step(t - pi / 2)) * sine(t);
+    const mySignal2 = (t: number) => trianglarPulse(t);
+    const mySignal3 = (t: number) => sinc(pi, t);
+    const mySignal4 = (t: number) => impulse(t-1);
+    // const comber = (t: number) => comb(0, t);
+
+
+    const signalA = mySignal2;
+    const signalB = step;
+
+    type plotterInputType = {
+        name: string;
+        function: Function;
+        stroke: string;
+        animationDuration?: number;
+    };
+
+    const functionsToPlot: plotterInputType[] = [
+        {
+            name: "signalA",
+            function: signalA,
+            stroke: "#8884d8",
+            animationDuration: 100,
+        },
+        {
+            name: "signalB",
+            function: signalB,
+            stroke: "#82ca9d",
+            animationDuration: 100,
+        },
+        {
+            name: "conv",
+            function: conv(signalA, signalB),
+            stroke: "#ff0000",
+            animationDuration: 10000,
+        },
     ];
-
     const plotFunctions2 = (
         functionsToPlot: { name: string; function: Function }[],
         timeRange: number[]
@@ -74,26 +164,13 @@ export default function Conv({}: Props) {
                 dataAtEachTime = {
                     ...dataAtEachTime,
                     [functionsToPlot[idx].name]:
-                        functionsToPlot[idx].function(t),
+                        Math.round(functionsToPlot[idx].function(t)*1000)/1000,
                 };
             }
             return dataAtEachTime;
         });
     };
-
-    // console.log(plotFunctions2(functionsToPlot, timeRange));
-
     const plotFunctions = plotFunctions2(functionsToPlot, timeRange);
-
-    // const plotFunctions = timeRange.map((t) => {
-    //     const plot = {
-    //         time: t,
-    //         sine: sine(2 * Math.PI * t),
-    //     };
-    //     return plot;
-    // });
-    // console.log("plotFunctions: ", plotFunctions);
-
     return (
         <div className="h-1/2 w-full">
             {/* plot using rechart */}
@@ -107,14 +184,21 @@ export default function Conv({}: Props) {
                                 <Line
                                     type="monotone"
                                     dataKey={func.name}
-                                    stroke="#8884d8"
+                                    stroke={func.stroke}
                                     dot={false}
                                     key={func.name}
+                                    animationDuration={func.animationDuration}
                                 />
                             );
                         })
                     }
-                    <XAxis dataKey="time" />
+                    <XAxis
+                        dataKey="time"
+                        type="number"
+                        domain={[5, 5]}
+                        allowDecimals={false}
+                        minTickGap={1}
+                    />
                     <YAxis />
                     <Tooltip />
                 </LineChart>
