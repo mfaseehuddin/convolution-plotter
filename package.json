@@ -12,7 +12,8 @@
   "dependencies": {
     "@heroicons/react": "^2.0.16",
     "@types/react-query": "^1.2.9",
-    "equation-resolver": "1.0.0",
+    "equation-parser": "^1.0.0",
+    "equation-resolver": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-equation": "1.0.0",

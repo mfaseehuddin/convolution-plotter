@@ -582,7 +582,7 @@ equation-parser@^1.0.0:
   resolved "https://registry.yarnpkg.com/equation-parser/-/equation-parser-1.0.0.tgz#c16c69e3c875ac2d4fda2f2f8ca87648b79a07df"
   integrity sha512-IeuLPiZoYMBvnFD5CR2ehF+NGjFDppEX3Ox/5suVQex3XII6QnWfUB3RWa6q2dQBGiMfA4a5SuauihpIPaRQhg==
 
-equation-resolver@1.0.0, equation-resolver@^1.0.0:
+equation-resolver@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/equation-resolver/-/equation-resolver-1.0.0.tgz#095f45c329d04aa64bae8210f7caa28cd0cfbe34"
   integrity sha512-g///JMzbprqLtaEKgSjsVG7iqT1sMr/Ku7dQ7EApltALjKqklM55EAwHRzFSfgABxrd/oEU02IMkW2htG6sFxg==
