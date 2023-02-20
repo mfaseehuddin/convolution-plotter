@@ -77,11 +77,11 @@ export default function Conv({}: Props) {
         }
     }
 
-    function sinc(a:number, t: number): number {
+    function sinc(a: number, t: number): number {
         if (t === 0) {
             return a;
         } else {
-            return Math.sin(a*t) / t;
+            return Math.sin(a * t) / t;
         }
     }
 
@@ -89,11 +89,9 @@ export default function Conv({}: Props) {
         return Math.exp(-t * t);
     }
 
-    function comb(T:number, t:number){
-        return impulse(t%T);
+    function comb(T: number, t: number) {
+        return impulse(t % T);
     }
-
-
 
     function conv(a: Function, b: Function) {
         return (t: number) => {
@@ -105,9 +103,6 @@ export default function Conv({}: Props) {
         };
     }
 
-
-    
-
     const domain = [-5, 5];
     const sampleRate = 0.1;
     const pi = Math.PI;
@@ -116,14 +111,13 @@ export default function Conv({}: Props) {
 
     const mySignal1 = (t: number) =>
         (step(t + pi / 2) - step(t - pi / 2)) * sine(t);
-    const mySignal2 = (t: number) => trianglarPulse(t);
+    const mySignal2 = (t: number) => trianglarPulse(t-3);
     const mySignal3 = (t: number) => sinc(pi, t);
-    const mySignal4 = (t: number) => impulse(t-1);
+    const mySignal4 = (t: number) => impulse(t - 1);
     // const comber = (t: number) => comb(0, t);
 
-
     const signalA = mySignal2;
-    const signalB = step;
+    const signalB = mySignal1;
 
     type plotterInputType = {
         name: string;
@@ -149,7 +143,7 @@ export default function Conv({}: Props) {
             name: "conv",
             function: conv(signalA, signalB),
             stroke: "#ff0000",
-            animationDuration: 10000,
+            animationDuration: 1000,
         },
     ];
     const plotFunctions2 = (
@@ -164,7 +158,8 @@ export default function Conv({}: Props) {
                 dataAtEachTime = {
                     ...dataAtEachTime,
                     [functionsToPlot[idx].name]:
-                        Math.round(functionsToPlot[idx].function(t)*1000)/1000,
+                        Math.round(functionsToPlot[idx].function(t) * 1000) /
+                        1000,
                 };
             }
             return dataAtEachTime;
@@ -203,6 +198,7 @@ export default function Conv({}: Props) {
                     <Tooltip />
                 </LineChart>
             </ResponsiveContainer>
+
         </div>
     );
 }
