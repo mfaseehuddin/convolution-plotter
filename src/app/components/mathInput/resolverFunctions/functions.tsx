@@ -16,7 +16,7 @@ import {
     sinc,
     impulse,
     Convolve,
-} from "../../conv/conv";
+} from "../../conv/elementaryFunctions/functions";
 
 //list of elementary functions to implement
 
@@ -299,7 +299,7 @@ export const convResolvers: FunctionLookup = {
     rectangularPulse: rectangularPulseResolver,
     sinc: sincResolver,
     impulse: impulseResolver,
-    trianglarPulse: triangularPulseResolver,
+    triangularPulse: triangularPulseResolver,
     // convRev: convRevResolver,
 };
 
