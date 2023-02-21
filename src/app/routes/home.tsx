@@ -1,4 +1,4 @@
-import Conv from "../components/conv/conv";
+import Conv from "../components/convPlot/conv";
 import React from "react";
 import MathInput from "../components/mathInput/mathInput";
 

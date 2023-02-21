@@ -34,7 +34,7 @@ export function sine(t: number): number {
 }
 export function triangularPulse(a: number, t: number): number {
     if (t >= -a && t <= a) {
-        return 1 - Math.abs(t);
+        return a - Math.abs(t);
     } else {
         return 0;
     }
@@ -73,6 +73,11 @@ export function comb(T: number, t: number) {
     return impulse(t % T);
 }
 
+// export function dirac(t: number): number {
+
+// }
+
+
 //need to make this function async to see if it helps with the lag
 
 export function Convolve(
@@ -89,3 +94,5 @@ export function Convolve(
         return sum * 2 * sampleTime;
     };
 }
+
+

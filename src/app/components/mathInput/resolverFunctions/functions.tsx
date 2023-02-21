@@ -16,7 +16,7 @@ import {
     sinc,
     impulse,
     Convolve,
-} from "../../conv/elementaryFunctions/functions";
+} from "../../convPlot/elementaryFunctions/functions";
 
 //list of elementary functions to implement
 
