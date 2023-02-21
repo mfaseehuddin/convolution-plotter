@@ -112,7 +112,7 @@ export default function Conv({
 
     const plotFunctions = plotFunctionsHelper(functionsToPlot, timeRange);
     return (
-        <div className="h-1/2 w-full">
+        <div className="mt-10 h-[50vh] w-full">
             {/* plot using rechart */}
 
             <ResponsiveContainer width="100%" height="100%">

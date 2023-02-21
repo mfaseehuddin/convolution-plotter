@@ -2,13 +2,18 @@ import React, { useState, createContext } from "react";
 import { appContextType } from "./types";
 import { pages } from "@/types/types";
 import { createBrowserRouter } from "react-router-dom";
-import { RocketLaunchIcon, WrenchIcon } from "@heroicons/react/20/solid";
+import {
+    RocketLaunchIcon,
+    WrenchIcon,
+    HomeIcon,
+} from "@heroicons/react/20/solid";
 import { SideBarItemProps } from "../../components/sidebar/types";
 
 //importing routes
 import Home from "../../routes/home";
 import Settings from "../../routes/settings";
 import { useEffect } from "react";
+import ConvolutionPlotter from "../../routes/convolutionPlotter";
 
 //create context for app of type
 export const AppContext = createContext<appContextType>({
@@ -26,19 +31,24 @@ type Props = {
 };
 
 export default function AppContextProvider({ children }: Props) {
-
     const appName = "ConvPlot";
-
 
     const [currentPage, setCurrentPage] = useState<pages>("Home");
 
     const pages: SideBarItemProps[] = [
         {
             label: "Home",
+            link:"/",
+            icon: <HomeIcon />,
+        },
+        {
+            label: "Convolution Plotter",
+            link:"/convplot",
             icon: <RocketLaunchIcon />,
         },
         {
             label: "Settings",
+            link:"/settings",
             icon: <WrenchIcon />,
             bottom: true,
         },
@@ -58,6 +68,10 @@ export default function AppContextProvider({ children }: Props) {
             ],
         },
         {
+            path: "/convplot",
+            element: <ConvolutionPlotter />,
+        },
+        {
             path: "/settings",
             element: <Settings />,
         },
@@ -65,8 +79,13 @@ export default function AppContextProvider({ children }: Props) {
 
     useEffect(() => {
         //send the user to the current page
-        appRouter.navigate(currentPage);
-    }, [currentPage]);
+        //get the current page from the url
+        const url = window.location.href;
+        const currentPage = url.split("/").pop();
+        if (currentPage) {
+            setCurrentPage(currentPage as pages);
+        }
+    }, []);
 
     return (
         <AppContext.Provider

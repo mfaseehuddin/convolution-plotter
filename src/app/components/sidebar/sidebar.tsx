@@ -62,6 +62,7 @@ export default function Sidebar({
                                         !item.bottom && (
                                             <SidebarItem
                                                 key={index}
+                                                link={item.link}
                                                 icon={item.icon}
                                                 label={item.label}
                                                 className={`${
@@ -78,6 +79,7 @@ export default function Sidebar({
                                     (item, index) =>
                                         item.bottom && (
                                             <SidebarItem
+                                                link={item.link}
                                                 key={index}
                                                 icon={item.icon}
                                                 label={item.label}
@@ -112,22 +114,20 @@ import { useContext } from "react";
 import { AppContext } from "../../context/app/appContext";
 
 export function SidebarItem({
+    link,
     icon,
     iconStyle,
     label,
     className,
 }: SideBarItemProps) {
-    const internalIconStyle = "text-gray-500 dark:text-gray-400 w-5 h-5";
+    const internalIconStyle = "text-gray-500 dark:text-gray-400 w-4 h-4";
 
     //import the appContext to get the changePage function
     const { setCurrentPage } = useContext(AppContext);
     return (
         <li className={className}>
             <a
-                onClick={(e) => {
-                    e.preventDefault();
-                    setCurrentPage(label);
-                }}
+                href={link}
                 className="flex items-center p-2 px-4 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
                 <span className={`first:${internalIconStyle}`}>{icon}</span>
