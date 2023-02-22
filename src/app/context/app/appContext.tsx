@@ -37,7 +37,7 @@ export default function AppContextProvider({ children }: Props) {
 
     const [currentPage, setCurrentPage] = useState<pages>("Home");
 
-    const [darkMode, setDarkMode] = useState<boolean>(false);
+    const [darkMode, setDarkMode] = useState<boolean>(true);
 
     const pages: SideBarItemProps[] = [
         {

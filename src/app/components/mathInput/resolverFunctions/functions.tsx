@@ -1,5 +1,5 @@
 import { EquationNodeFunction } from "equation-parser";
-import { ResultNode } from "equation-resolver";
+import { ResultNode, defaultVariables } from 'equation-resolver';
 import { ResolveOptions } from "equation-resolver/dist/ResolveOptions";
 import { resolve } from "equation-resolver";
 
@@ -314,6 +314,9 @@ export const convInterfacer = (
     try {
         const result = resolve(parsedEquation, {
             variables: {
+                ...defaultVariables,
+
+
                 t: {
                     type: "number",
                     value: t,

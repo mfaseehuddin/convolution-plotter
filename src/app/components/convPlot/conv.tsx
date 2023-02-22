@@ -16,7 +16,7 @@ import { useDebounce, useEffectOnce } from "usehooks-ts";
 
 import { Convolve } from "./elementaryFunctions/functions";
 
-const pi = Math.PI;
+
 
 type Props = {
     signalA: EquationNode | EquationParserError;
