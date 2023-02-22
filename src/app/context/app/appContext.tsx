@@ -1,6 +1,6 @@
 import React, { useState, createContext } from "react";
 import { appContextType } from "./types";
-import { pages } from "@/types/types";
+import { pages } from "../../types/types";
 import { createBrowserRouter } from "react-router-dom";
 import {
     RocketLaunchIcon,
@@ -22,6 +22,8 @@ export const AppContext = createContext<appContextType>({
     setCurrentPage: () => {},
     pages: [],
     appRouter: undefined,
+    darkMode: false,
+    setDarkMode: () => {},
 });
 
 //context provider
@@ -35,20 +37,22 @@ export default function AppContextProvider({ children }: Props) {
 
     const [currentPage, setCurrentPage] = useState<pages>("Home");
 
+    const [darkMode, setDarkMode] = useState<boolean>(false);
+
     const pages: SideBarItemProps[] = [
         {
             label: "Home",
-            link:"/",
+            link: "/",
             icon: <HomeIcon />,
         },
         {
             label: "Convolution Plotter",
-            link:"/convplot",
+            link: "/convplot",
             icon: <RocketLaunchIcon />,
         },
         {
             label: "Settings",
-            link:"/settings",
+            link: "/settings",
             icon: <WrenchIcon />,
             bottom: true,
         },
@@ -87,6 +91,15 @@ export default function AppContextProvider({ children }: Props) {
         }
     }, []);
 
+    useEffect(() => {
+        //change the theme
+        if (darkMode) {
+            document.documentElement.classList.add("dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+        }
+    }, [darkMode]);
+
     return (
         <AppContext.Provider
             value={{
@@ -95,6 +108,8 @@ export default function AppContextProvider({ children }: Props) {
                 setCurrentPage,
                 pages,
                 appRouter,
+                darkMode,
+                setDarkMode,
             }}
         >
             {children}

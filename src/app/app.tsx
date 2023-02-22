@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { RouterProvider } from "react-router-dom";
 import { AppContext } from "./context/app/appContext";
 
-import Layout from "./components/layout/Layout";
+import Layout from "./components/layout/layout";
 
 type Props = {};
 

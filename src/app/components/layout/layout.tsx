@@ -17,7 +17,7 @@ export default function Layout({ children }: Props) {
             currentPage={currentPage}
             sideBarItems={pages}
             appName={appName}
-            className={`dark`}
+            className={``}
         >
             {children}
         </Sidebar>

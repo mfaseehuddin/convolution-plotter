@@ -101,7 +101,7 @@ export default function Conv({ signalA, signalB, equationContext }: Props) {
     const plotFunctions = plotFunctionsHelper(functionsToPlot, timeRange);
 
     return (
-        <div className="mt-10 h-fit w-full flex flex-row-reverse">
+        <div className="mt-10 h-screen max-h-[50vh] w-full flex flex-row-reverse flex-wrap-reverse md:flex-nowrap">
             <div className="w-1/4 flex flex-col justify-center p-5 ml-5 dark:bg-gray-900 rounded-2xl hover:scale-105 transition-all duration-500">
                 <p className="dark:text-white">Plot Settings:</p>
                 <div className="flex my-5 w-full">
@@ -175,7 +175,7 @@ export default function Conv({ signalA, signalB, equationContext }: Props) {
                 </div>
             </div>
 
-            <div className="h-3/5 w-3/4">
+            <div className="h-full w-3/4">
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart height={300} width={500} data={plotFunctions}>
                         {

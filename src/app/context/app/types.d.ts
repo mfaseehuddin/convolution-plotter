@@ -9,4 +9,6 @@ export type appContextType = {
     //setCurrentPage is react use state
     setCurrentPage: React.Dispatch<React.SetStateAction<pages>>;
     appRouter: Router;
+    darkMode?: boolean;
+    setDarkMode?: React.Dispatch<React.SetStateAction<boolean>>;
 };

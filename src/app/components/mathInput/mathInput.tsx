@@ -6,8 +6,8 @@ import {
 } from "react-equation";
 import { defaultFunctions, defaultVariables } from "equation-resolver";
 import { parse } from "equation-parser";
-import Conv from "../convPlot/conv"
-import { EquationUI } from './equationInput/equationInput';
+import Conv from "../convPlot/conv";
+import { EquationUI } from "./equationInput/equationInput";
 
 type Props = {};
 
@@ -19,40 +19,37 @@ export default function MathInput({}: Props) {
     );
 
     return (
-        <code className={`font-semibold h-screen w-screen`}>
-            <EquationOptions
-                variables={defaultVariables}
-                functions={defaultFunctions}
-                errorHandler={defaultErrorHandler}
-            >
-                <EquationContext
-                    render={(equation) => (
-                        <>
-                            <EquationUI
-                                name="Equation 1"
-                                input={equationAInput}
-                                setInput={setEquationAInput}
-                                equationContext={equation}
-                            />
+        <EquationOptions
+            variables={defaultVariables}
+            functions={defaultFunctions}
+            errorHandler={defaultErrorHandler}
+        >
+            <EquationContext
+                render={(equation) => (
+                    <>
+                        <EquationUI
+                            name="Equation 1"
+                            input={equationAInput}
+                            setInput={setEquationAInput}
+                            equationContext={equation}
+                        />
 
-                            <EquationUI
-                                name="Equation 2"
-                                input={equationBInput}
-                                setInput={setEquationBInput}
-                                equationContext={equation}
-                            />
+                        <EquationUI
+                            name="Equation 2"
+                            input={equationBInput}
+                            setInput={setEquationBInput}
+                            equationContext={equation}
+                        />
 
-
-                            <Conv
-                                signalA={parse(equationAInput)}
-                                signalB={parse(equationBInput)}
-                                equationContext={equation}
-                            />
-                        </>
-                    )}
-                />
-            </EquationOptions>
-        </code>
+                        <Conv
+                            signalA={parse(equationAInput)}
+                            signalB={parse(equationBInput)}
+                            equationContext={equation}
+                        />
+                    </>
+                )}
+            />
+        </EquationOptions>
     );
 }
 

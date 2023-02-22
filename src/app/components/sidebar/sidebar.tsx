@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { SideBarItemProps } from "./types.d";
-import { pages } from "@/types/types";
+import { pages } from "../../types/types.d";
 
 type Props = {
     sideBarItems: SideBarItemProps[];
@@ -41,11 +41,14 @@ export default function Sidebar({
                                         </span>
                                     </a>
                                 </div>
-                                <div
-                                    className="bg-emerald-400 rounded-full h-7 w-7 active:scale-90 transition-all duration-100"
-                                    ref={sidebarButtonRef}
-                                    onClick={toggleSidebar}
-                                ></div>
+                                <div className="flex gap-5 items-center">
+                                    <div
+                                        className="bg-emerald-400 rounded-full h-7 w-7 active:scale-90 transition-all duration-100"
+                                        ref={sidebarButtonRef}
+                                        onClick={toggleSidebar}
+                                    ></div>
+                                    <Toggler />
+                                </div>
                             </div>
                         </div>
                     </nav>
@@ -112,6 +115,7 @@ export default function Sidebar({
 
 import { useContext } from "react";
 import { AppContext } from "../../context/app/appContext";
+import Toggler from "../controllers/themeToggler/Toggler";
 
 export function SidebarItem({
     link,
