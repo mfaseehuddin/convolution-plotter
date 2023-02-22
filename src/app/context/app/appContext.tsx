@@ -59,7 +59,6 @@ export default function AppContextProvider({ children }: Props) {
     ];
 
     //TODO: make routeObject Array
-
     const appRouter = createBrowserRouter([
         {
             path: "/",

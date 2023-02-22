@@ -1,8 +1,10 @@
-import { EquationNodeFunction } from "equation-parser";
-import { ResultNode, defaultVariables } from 'equation-resolver';
-import { ResolveOptions } from "equation-resolver/dist/ResolveOptions";
-import { resolve } from "equation-resolver";
-
+import { defaultFunctions } from 'equation-resolver';
+import { defaultVariables, ResultNode } from 'equation-resolver';
+import { EquationNode } from 'equation-parser';
+import { EquationNodeFunction } from 'equation-parser';
+import { FunctionLookup } from 'equation-resolver';
+import { resolve } from 'equation-resolver';
+import { ResolveOptions } from 'equation-resolver/dist/ResolveOptions';
 import {
     step,
     triangularPulse,
@@ -287,7 +289,6 @@ export const triangularPulseResolver = (
 //     };
 // };
 
-import { FunctionLookup } from "equation-resolver";
 
 export const convResolvers: FunctionLookup = {
     u: stepResolver,
@@ -303,8 +304,6 @@ export const convResolvers: FunctionLookup = {
     // convRev: convRevResolver,
 };
 
-import { EquationNode } from "equation-parser";
-import { defaultFunctions } from "equation-resolver";
 
 
 export const convInterfacer = (

@@ -1,3 +1,9 @@
+import { convInterfacer } from "../mathInput/resolverFunctions/functions";
+import { Convolve } from "./elementaryFunctions/functions";
+import { EquationNode } from "equation-parser";
+import { EquationParserError } from "equation-parser/dist/EquationParserError";
+import { useDebounce } from "usehooks-ts";
+import { useState } from "react";
 import {
     ResponsiveContainer,
     LineChart,
@@ -6,17 +12,6 @@ import {
     YAxis,
     Tooltip,
 } from "recharts";
-
-import { EquationNode } from "equation-parser";
-// import { EquationParserError } from "equation-parser";
-import { EquationParserError } from "equation-parser/dist/EquationParserError";
-import { convInterfacer } from "../mathInput/resolverFunctions/functions";
-import { useEffect, useState } from "react";
-import { useDebounce, useEffectOnce } from "usehooks-ts";
-
-import { Convolve } from "./elementaryFunctions/functions";
-
-
 
 type Props = {
     signalA: EquationNode | EquationParserError;
